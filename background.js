@@ -1,23 +1,22 @@
-const oldReddit = "https://old.reddit.com";
+const clientURL = "https://ckh4.github.io/imgur-client#";
 
 chrome.webRequest.onBeforeRequest.addListener(
   function(details) {
-    // Exclude poll pages
-    if (details.url.match(/^https?:\/\/(www\.)*reddit.com\/poll/)) {
+    // Exclude tag pages and home page
+    if (details.url.match(/^https?:\/\/(www\.)?imgur.com\/t\//) || /^https?:\/\/(www\.)?imgur.com\/?$/.test(details.url)) {
       return;
     }
 
     return {
       redirectUrl:
-        oldReddit + details.url.match(/^https?:\/\/[^\/]+([\S\s]*)/)[1]
+        clientURL + details.url
     };
   },
   {
     urls: [
-      "*://reddit.com/*",
-      "*://www.reddit.com/*",
-      "*://np.reddit.com/*",
-      "*://new.reddit.com/*",
+      "*://imgur.com/*",
+      "*://www.imgur.com/*",
+      "*://i.imgur.com/*",
     ],
     types: [
       "main_frame",
@@ -27,7 +26,7 @@ chrome.webRequest.onBeforeRequest.addListener(
       "image",
       "object",
       "xmlhttprequest",
-      "other"
+      "other",
     ]
   },
   ["blocking"]
